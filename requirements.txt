@@ -1,6 +1,10 @@
 streamlit
 google-generativeai
 speechrecognition
-opencv-python-headless
-pytesseract
+opencv-python
+easyocr
 numpy
+Pillow
+torch
+torchvision
+torchaudio
