@@ -1,0 +1,7 @@
+streamlit
+google-generativeai
+speechrecognition
+opencv-python
+pytesseract
+numpy
+sqlite3
