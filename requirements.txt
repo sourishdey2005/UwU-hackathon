@@ -1,10 +1,5 @@
-streamlit
-google-generativeai
-speechrecognition
-opencv-python
 easyocr
-numpy
-Pillow
-torch
-torchvision
-torchaudio
+google-generativeai
+SpeechRecognition
+sqlite3
+opencv-python-headless  # To avoid issues with OpenCV in cloud environments
