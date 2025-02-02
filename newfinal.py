@@ -1,7 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
 import speech_recognition as sr  # Voice Input
-import cv2  # Camera Integration
 import easyocr  # OCR for Handwritten Text Recognition (Replaced Tesseract)
 import sqlite3  # User authentication & storage
 from uuid import uuid4  # Unique ID for versioning
