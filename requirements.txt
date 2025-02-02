@@ -1,6 +1,6 @@
 streamlit
 google-generativeai
 speechrecognition
-opencv-python
+opencv-python-headless
 pytesseract
 numpy
