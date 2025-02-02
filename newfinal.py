@@ -5,6 +5,7 @@ import cv2  # Camera Integration
 import easyocr  # OCR for Handwritten Text Recognition (Replaced Tesseract)
 import sqlite3  # User authentication & storage
 from uuid import uuid4  # Unique ID for versioning
+import os
 
 # --- API CONFIGURATION ---
 GEMINI_API_KEY = "AIzaSyDOvM48IMxod_4SvEttajKXcVDblmKHyPk"  # Replace with your actual API key
@@ -58,7 +59,7 @@ def login_page():
     """, unsafe_allow_html=True)
     
     with st.sidebar:
-        st.image("https://cdn.pixabay.com/photo/2016/12/07/15/50/code-1891656_960_720.jpg", use_container_width=True)
+        st.image("https://cdn.pixabay.com/photo/2016/12/07/15/50/code-1891656_960_720.jpg", use_column_width=True)
         st.subheader("🔑 Welcome to UwU Code Generator X")
         username = st.text_input("👤 Username", placeholder="Enter your username")
         password = st.text_input("🔒 Password", type="password", placeholder="Enter your password")
@@ -131,22 +132,24 @@ def main():
     
     # --- Image Text Extraction (OCR) ---
     with col2:
-        if st.button("📸 Capture Photo"):
-            cap = cv2.VideoCapture(0)
-            ret, frame = cap.read()
-            cap.release()
-            if ret:
-                st.image(frame, channels="BGR", caption="📸 Captured Image")
-                try:
-                    reader = easyocr.Reader(["en"])  # Using EasyOCR
-                    text = reader.readtext(frame, detail=0)  # Extracting text
-                    extracted_text = " ".join(text)  # Converting list to string
-                    user_prompt += " " + extracted_text
-                    st.text_area("📝 Extracted Text from Image:", user_prompt, height=150)
-                except Exception as e:
-                    st.error(f"❌ OCR Failed: {e}")
-            else:
-                st.error("❌ Failed to capture image")
+        # For Cloud deployment, allow image file upload
+        uploaded_file = st.file_uploader("📤 Upload an Image for Text Extraction", type=["jpg", "png", "jpeg"])
+        if uploaded_file is not None:
+            file_bytes = uploaded_file.read()
+            file_path = f"temp_image.jpg"
+            with open(file_path, "wb") as f:
+                f.write(file_bytes)
+
+            st.image(file_path, caption="📸 Uploaded Image", use_column_width=True)
+
+            try:
+                reader = easyocr.Reader(['en'])  # Initialize EasyOCR reader
+                result = reader.readtext(file_path)  # Use EasyOCR
+                extracted_text = " ".join([text[1] for text in result])
+                user_prompt += " " + extracted_text
+                st.text_area("📝 Extracted Text from Image:", user_prompt, height=150)
+            except Exception as e:
+                st.error(f"❌ OCR Failed: {e}")
     
     # --- Code Generation ---
     if st.button("✨ Generate Code!"):
